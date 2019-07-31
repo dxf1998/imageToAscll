@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>imageToAscll</title>
+    <script type="text/javascript" src="lib/jquery-3.2.1.min.js"></script>
+    <style>
+        #cert{
+            /*opacity:0;*/
+            /*filter:alpha(opacity=0);*/
+            /*position: absolute;*/
+            /*top: 0;*/
+            /*left: 0;*/
+            z-index: 9;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<button type="button" id="insert_image_button">添加图片
+    <input id="cert" type="file"/>
+</button>
+
+
+</body>
+<script>
+    $(function () {
+        $("#download-box").hide();
+    // 添加图片
+    $("#insert_image_button").click(function () {
+        document.getElementById("cert").click();
+    });
+
+    //    图片上传
+    function upload() {
+        var type = "file";          //后台接收时需要的参数名称，自定义即可
+        var id = "cert";            //即input的id，用来寻找值
+        var formData = new FormData();
+        formData.append(type, $("#" + id)[0].files[0]);    //生成一对表单属性
+        $.ajax({
+            type: "POST",           //因为是传输文件，所以必须是post
+            url: '/uploadimg',         //对应的后台处理类的地址
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                window.open(data);
+                // location.href=data;
+            }
+        });
+    };
+
+    //图片上传引用
+    $("#cert").on("change", function () {
+        if ($("#cert").val() != "") {
+            upload();
+        }
+    });
+
+
+
+    });
+</script>
+</html>
